@@ -1,0 +1,68 @@
+<ng-container>
+  <h2 class="main-header">{{ flightType | titlecase }} Flight</h2>
+
+  <form [formGroup]="form">
+    <ng-container *ngFor="let item of destinationInputs">
+      <div class="custom-input-wrapper">
+        <label class="label p-l-top-mobile">
+          {{ item | translate: { lang: lang } }}
+        </label>
+        <s-typeahead-select-field
+          [formControlName]="destinationInputFormControlName[item]"
+          [options]="options"
+        >
+          <ng-template
+            listItemFormatting
+            let-country
+          >
+            <span>{{ country.name }} - {{ country.value }}</span>
+          </ng-template>
+        </s-typeahead-select-field>
+        <img
+          [src]="'assets/icons/' + destinationInputIcons[item]"
+          alt="flight-active"
+          class="img-size-2 custom-input-icon"
+        >
+      </div>
+    </ng-container>
+
+    <div class="search-page-separator p-l-top-mobile"></div>
+
+    <ng-container *ngFor="let dateInput of datesForm">
+      <ng-container *ngIf="flightType !== datesFormConfig[dateInput].isSingle">
+        <div class="custom-input-wrapper">
+          <label class="label p-l-top-mobile">
+            {{ dateInput | translate: { lang: lang } }}
+          </label>
+          <s-date-picker
+            [datePickerOptions]="datesFormConfig[dateInput].config"
+            (dateChange)="onDateChange(datesFormConfig[dateInput].value, $event)"
+          >
+          </s-date-picker>
+          <img
+            src="assets/icons/departure-gold.svg"
+            alt="calendar"
+            class="img-size-2 custom-input-icon"
+          >
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <div class="search-page-separator p-l-top-mobile"></div>
+
+    <div class="d-flex align-center justify-between p-xl-top-mobile">
+      <div class="d-flex align-center">
+        <span class="p-m-after-mobile label">{{ searchToggles.Flex | translate: { lang: lang } }}</span>
+        <toggle (onToggleChange)="onToggleChange(searchToggles.Flex, $event)"></toggle>
+      </div>
+
+      <div class="d-flex align-center">
+        <span class="p-m-after-mobile label">
+          {{ searchToggles.Gold | translate: { lang: lang } }}
+        </span>
+        <toggle (onToggleChange)="onToggleChange(searchToggles.Gold, $event)"></toggle>
+      </div>
+    </div>
+
+  </form>
+</ng-container>
